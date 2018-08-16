@@ -8,7 +8,7 @@ from keras.preprocessing.sequence import pad_sequences
 start_time = time.time()
 
 #%% load dataset
-dataset = pd.read_csv('questions.csv')
+dataset = pd.read_csv('all.tsv', sep='\t', keep_default_na=False)
 
 #%% load question pairs
 q1 = dataset['question1'].values
@@ -16,11 +16,10 @@ q2 = dataset['question2'].values
 isDuplicate = dataset['is_duplicate'].values
 print (len(q1), "Question Pairs Loaded")
 
-## CONSTANTS
-TRAINING_SIZE = int (len(q1) * 0.95)
-VALIIDATION_SIZE = int(len(q1) * 0.025)
-TEST_SIZE = int(len(q1) * 0.025)
 # max sentene length
+TRAINING_SIZE = 384348
+VALIIDATION_SIZE = 10000
+TEST_SIZE = 10000
 MAX_LENGTH = 30
 
 ## Tokenize data
@@ -57,21 +56,21 @@ test_y = isDuplicate[-TEST_SIZE:]
 print ('Generated',len(test_x1) , 'Test Set')
 
 ## Save Data
-np.save('datasets/train_x1', train_x1)
-np.save('datasets/train_x2', train_x2)
-np.save('datasets/train_y', train_y)
-np.save('datasets/valid_x1', valid_x1)
-np.save('datasets/valid_x2', valid_x2)
-np.save('datasets/valid_y', valid_y)
-np.save('datasets/test_x1', test_x1)
-np.save('datasets/test_x2', test_x2)
-np.save('datasets/test_y', test_y)
+np.save('train_x1', train_x1)
+np.save('train_x2', train_x2)
+np.save('train_y', train_y)
+np.save('valid_x1', valid_x1)
+np.save('valid_x2', valid_x2)
+np.save('valid_y', valid_y)
+np.save('test_x1', test_x1)
+np.save('test_x2', test_x2)
+np.save('test_y', test_y)
 print ('Datasets saved')
 
 
 ## Load Word Embeddings
 word_index = t.word_index
-GLOVE_FILE = 'glove.840B.300D.txt'
+GLOVE_FILE = 'glove.840B.300d.txt'
 embeddings_index = {}
 with open(GLOVE_FILE, encoding='utf-8') as f:
 	l = 0
